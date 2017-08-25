@@ -1,0 +1,105 @@
+# 蜗牛慢慢爬 LeetCode 2. Add Two Numbers [Difficulty: Medium]
+
+tags:LeetCode
+
+---
+
+###题目
+You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+
+You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+
+###翻译
+给定两个非空的链表，表示两个非负整数。数字倒序存储，每个节点包含一个数字。将两个数字求和并将结果以链表形式返回
+你可以假定数字不包含前导0（除了0本身之外）
+输入：（2 - > 4 - > 3）+（5 - > 6 - > 4）
+输出：7 - > 0 - > 8
+
+###Hints
+Related Topics: Linked List, Math
+注意简化代码
+
+###代码
+####Java
+```Java
+public class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode c1 = l1;
+        ListNode c2 = l2;
+        ListNode s = new ListNode(0);
+        ListNode d = s;
+        int sum = 0;
+        while(c1!=null||c2!=null){
+            sum /= 10;
+            if(c1!=null){
+                sum += c1.val;
+                c1 = c1.next;
+            }
+            if(c2!=null){
+                sum += c2.val;
+                c2 = c2.next;
+            }
+            d.next = new ListNode(sum%10);
+            d = d.next;
+        }
+        if(sum/10==1)
+            d.next = new ListNode(1);
+        return s.next;
+    }
+}
+
+```
+
+####Python
+```Python
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution(object):
+    def addTwoNumbers(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        out = 0
+        result = ListNode(0)
+        l = result
+        while l1!=None or l2!=None:
+            x1 = l1.val if l1!=None else 0
+            x2 = l2.val if l2!=None else 0
+            l.next = ListNode((x1+x2+out)%10)
+            out = (x1+x2+out)/10
+            l = l.next
+            
+            l1 = l1.next if l1!=None else l1
+            l2 = l2.next if l2!=None else l2
+        if out!=0:
+            l.next = ListNode(out)
+        return result.next
+
+//better solution from discuss
+class Solution(object):        
+    def addTwoNumbers(self, l1, l2):
+        carry = 0
+        root = n = ListNode(0)
+        while l1 or l2 or carry:
+            v1 = v2 = 0
+            if l1:
+                v1 = l1.val
+                l1 = l1.next
+            if l2:
+                v2 = l2.val
+                l2 = l2.next
+            carry, val = divmod(v1+v2+carry, 10)
+            n.next = ListNode(val)
+            n = n.next
+        return root.next
+        
+```
